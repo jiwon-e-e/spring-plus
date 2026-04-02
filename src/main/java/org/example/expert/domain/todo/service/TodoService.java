@@ -14,8 +14,11 @@ import org.example.expert.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +51,10 @@ public class TodoService {
         );
     }
 
-    public Page<TodoResponse> getTodos(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+    public Page<TodoResponse> getTodos(int page, int size, String weather, LocalDateTime startModified, LocalDateTime endModified) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("modifiedAt").descending());
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(weather, startModified, endModified, pageable);
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
