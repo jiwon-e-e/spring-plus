@@ -6,15 +6,20 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.ServerException;
 import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j(topic = "JwtUtil")
 @Component
@@ -62,5 +67,20 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public UsernamePasswordAuthenticationToken getAuthentication(String jwt) {
+        Claims claims = extractClaims(jwt);
+
+        Long userId = claims.get("id", Long.class);
+        String email = claims.get("email", String.class);
+        UserRole role = UserRole.valueOf(claims.get("userRole", String.class));
+        String nickname = claims.get("nickname", String.class);
+
+        AuthUser user = new AuthUser(userId, email, role, nickname);
+
+        return new UsernamePasswordAuthenticationToken(
+                user, null, List.of(new SimpleGrantedAuthority("ROLE_"+role))
+        );
     }
 }
