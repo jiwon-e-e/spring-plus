@@ -72,7 +72,8 @@ public class JwtUtil {
     public UsernamePasswordAuthenticationToken getAuthentication(String jwt) {
         Claims claims = extractClaims(jwt);
 
-        Long userId = claims.get("id", Long.class);
+//        Long userId = claims.get("id", Long.class); // id 는 claims 가 아닌 subject 로 저장했었다....
+        Long userId = Long.parseLong(claims.getSubject());
         String email = claims.get("email", String.class);
         UserRole role = UserRole.valueOf(claims.get("userRole", String.class));
         String nickname = claims.get("nickname", String.class);
