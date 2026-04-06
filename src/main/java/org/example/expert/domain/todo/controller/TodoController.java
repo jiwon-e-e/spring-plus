@@ -4,11 +4,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
+import org.example.expert.domain.todo.dto.request.TodoSummaryRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
 import org.example.expert.domain.todo.dto.response.TodoSummaryResponse;
 import org.example.expert.domain.todo.service.TodoService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,13 +51,9 @@ public class TodoController {
 
     @GetMapping("/todos/summary")
     public ResponseEntity<Page<TodoSummaryResponse>> getTodoSummary(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String managerName,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false) LocalDateTime startCreated,
-            @RequestParam(required = false) LocalDateTime endCreated
+            TodoSummaryRequest request,
+            Pageable pageable
     ) {
-        return ResponseEntity.ok(todoService.getTodoSummary(page, size, managerName, startCreated, endCreated));
+        return ResponseEntity.ok(todoService.getTodoSummary(request, pageable));
     }
 }

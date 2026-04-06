@@ -1,5 +1,6 @@
 package org.example.expert.domain.todo.repository;
 
+import org.example.expert.domain.todo.dto.request.TodoSummaryRequest;
 import org.example.expert.domain.todo.dto.response.TodoSummaryResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.springframework.data.domain.Page;
@@ -19,9 +20,7 @@ public interface TodoCustomRepository {
 //            Pageable pageable);
 
     Page<TodoSummaryResponse> findAllTodoSummary(
-            String managerName,
-            LocalDateTime startCreated,
-            LocalDateTime endCreated,
+            TodoSummaryRequest request,
             Pageable pageable) ;
 
     }
