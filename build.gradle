@@ -51,6 +51,13 @@ dependencies {
     // security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // aws
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store:3.1.1'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1'
+
 }
 
 tasks.named('test') {
