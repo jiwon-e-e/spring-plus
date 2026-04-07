@@ -26,6 +26,7 @@ public class SecurityConfig {
                 authorize
                     .requestMatchers("/auth/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/actuator/**").permitAll()
                     .anyRequest().authenticated();
         })
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
