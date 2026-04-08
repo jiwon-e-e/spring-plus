@@ -10,6 +10,8 @@ import org.example.expert.domain.user.dto.request.UserChangePasswordRequest;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +35,17 @@ public class UserService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     public UserResponse getUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
         return new UserResponse(user.getId(), user.getEmail());
+    }
+
+    public List<Map<String, Object>> getUserByNickname(String nickname) {
+        String sql = "SELECT * FROM users WHERE nickname = ? LIMIT 1";
+        return jdbcTemplate.queryForList(sql, nickname);
     }
 
     @Transactional

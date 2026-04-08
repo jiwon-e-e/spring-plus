@@ -52,6 +52,8 @@ public class User extends Timestamped {
         this.userRole = userRole;
     }
 
+    public void setNickname(String s) {
+        this.nickname = s;
     public void updateProfileImage(String url){
         this.url = url;
     }
