@@ -1,17 +1,39 @@
 spring:
+  config:
+    import: aws-parameterstore:/plus/
+
+  cloud:
+    aws:
+      s3:
+        bucket: ${S3_BUCKET}
+      region:
+        static: ap-northeast-2
+      stack:
+        auto: false
+
   datasource:
-    url: jdbc:mysql://localhost:3306/nbcam?rewriteBatchedStatements=true
-    username: root
+    url: jdbc:mysql://${DB_HOST}:3306/example
+    username: admin
     password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
 
 ## ???? ??? ???
 jwt:
